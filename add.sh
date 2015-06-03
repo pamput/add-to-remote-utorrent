@@ -1,0 +1,27 @@
+#!/bin/sh
+
+HOST="$1"
+AUTH="$2"
+FILE="$3"
+
+if [ "$HOST" = "" ] || [ "$AUTH" = "" ] || [ "$FILE" = "" ]
+then
+	echo "add.sh <HOST> <AUTH> <FILE>"
+	echo "ex: add.sh utorrent.com:8080 user:pass magnetfile"
+	echo "If password is not provided will be prompted"
+	exit 0
+fi
+
+TOKEN=$(curl -c cjar --basic --user $AUTH http://$HOST/gui/token.html | sed -E 's/<html><div[^>]*>([^>]*)<\/div><\/html>/\1/g')
+
+while read LINK           
+do           
+	TIME="$(date +%s)0000"
+	E_LINK=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$LINK")
+	URL="http://$HOST/gui/?token=$TOKEN&action=add-url&s=$E_LINK"
+	echo $URL
+	curl -b cjar --basic --user $AUTH $URL
+	echo "OK!"       
+done < $FILE 
+
+exit 0
