@@ -1,4 +1,5 @@
 #!/bin/sh
+# @Author Łukasz Kwasek
 
 HOST="$1"
 AUTH="$2"
