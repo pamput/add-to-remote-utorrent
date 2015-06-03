@@ -17,7 +17,6 @@ TOKEN=$(curl -c cjar --basic --user $AUTH http://$HOST/gui/token.html | sed -E '
 
 while read LINK           
 do           
-	TIME="$(date +%s)0000"
 	E_LINK=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$LINK")
 	URL="http://$HOST/gui/?token=$TOKEN&action=add-url&s=$E_LINK"
 	echo $URL
